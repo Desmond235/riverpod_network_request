@@ -10,7 +10,7 @@ class PreviousButton extends ConsumerWidget {
     final canGoToPreviousPage = ref.watch(canGoToPreviousPageProvider);
 
     void goToPreviousPage() {
-      final index =ref.read(pageIndexProvider.notifier).update((state) => state - 1);
+      ref.read(pageIndexProvider.notifier).update((state) => state - 1);
     }
 
     return ElevatedButton(
