@@ -12,9 +12,10 @@ final completedTodosProvider = Provider.autoDispose<Set<Todo>>((ref) {
   final todos = ref.watch(todoListProvider) as Set;
   return todos.cast<Todo>().where((todo) => todo.isCompleted).toSet();
 });
-final todosProvider = AsyncNotifierProvider.autoDispose<TodosNotifier, List<Todo>>(
-  TodosNotifier.new,
-);
+final todosProvider =
+    AsyncNotifierProvider.autoDispose<TodosNotifier, List<Todo>>(
+      TodosNotifier.new,
+    );
 
 class TodoNotifier extends AutoDisposeAsyncNotifier<Set<Todo>> {
   @override
@@ -55,22 +56,23 @@ class TodoNotifier extends AutoDisposeAsyncNotifier<Set<Todo>> {
 }
 
 class TodosNotifier extends AutoDisposeAsyncNotifier<List<Todo>> {
+  static const baseUrl = 'http://localhost/';
   @override
-  Future<List<Todo>> build() async{
+  Future<List<Todo>> build() async {
     return _fetchTodo();
   }
 
   Future<List<Todo>> _fetchTodo() async {
-    final response = await http.get(Uri.parse('http://localhost/api/todos'));
-    final todos = jsonDecode(response.body) as List<Map<String, dynamic>>;
-    return todos.map(Todo.fromJson).toList();
+    final response = await http.get(Uri.parse('${baseUrl}api/todos'));
+    final todo = jsonDecode(response.body) as List<Map<String, dynamic>>;
+    return todo.map((json) => Todo.fromJson(json)).toList();
   }
 
   Future<void> addTodo(Todo todo) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await http.post(
-        Uri.parse('http://localhost/api/todos'),
+        Uri.parse('${baseUrl}api/todos'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(todo.toJson()),
       );
@@ -81,7 +83,7 @@ class TodosNotifier extends AutoDisposeAsyncNotifier<List<Todo>> {
   Future<void> removeTodo(String todoId) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await http.delete(Uri.parse('http://localhost/api/todo/$todoId'));
+      await http.delete(Uri.parse('${baseUrl}api/todos/$todoId'));
       return _fetchTodo();
     });
   }
@@ -90,18 +92,17 @@ class TodosNotifier extends AutoDisposeAsyncNotifier<List<Todo>> {
     final currentTodos = state.value ?? [];
     final todo = currentTodos.firstWhere(
       (t) => t.id == todoId,
-      orElse: () => throw Exception('Tod not found'),
+      orElse: () => throw Exception("Todo not found"),
     );
 
-    final updatedTodo = todo.copyWith(isCompleted: !todo.isCompleted);
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async{
-      await http.patch(
-        Uri.parse('http://localhost/api/todo/${todo.id}'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({"isCompleted": !updatedTodo.isCompleted}),
-      );
+    final updatedTodos = todo.copyWith(isCompleted: !todo.isCompleted);
 
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await http.patch(
+        Uri.parse('${baseUrl}api/todos/$todoId'),
+        body: {"isCompleted": updatedTodos.isCompleted},
+      );
       return _fetchTodo();
     });
   }
