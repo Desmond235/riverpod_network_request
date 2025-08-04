@@ -8,14 +8,18 @@ class Homescreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activity = ref.watch(activityProvider);
+    final activities = ref.watch(activityProvider(const['recreational', 'cooking', 'education']));
     return Scaffold(
       body: Center(
-        child: activity.when(
-          data: (value) => Text('Activity: ${value.activity}'),
-          error: (error, stack) => Text('Error: $error'),
-          loading: () => const CircularProgressIndicator(),
-        ),
+        child: activities.when(
+          data: (value) => Column(
+            children: [
+              for(final activity in value)
+              Text(activity.activity)
+            ],
+          ),
+           error: (error, _) => Text('Error: $error'),
+            loading: () => const CircularProgressIndicator())
       ),
     );
   }
