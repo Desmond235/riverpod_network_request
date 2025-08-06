@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_network_request/models/activity.dart';
 
+// passing arguments to  your requests
+
 final activityProvider = AsyncNotifierProvider.autoDispose
     .family<ActivityNotifier, List<Activity>, List<String>>(ActivityNotifier.new);
 
