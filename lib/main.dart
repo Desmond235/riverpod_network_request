@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_network_request/provider/provider_observer.dart';
 import 'package:riverpod_network_request/screens/home/homescreen.dart';
 import 'package:riverpod_network_request/provider/theme_provider.dart';
 
 void main() {
   runApp(
     ProviderScope(
+      observers: [
+        MyObserver()
+      ],
       child: const MyApp(),
     )
   );
