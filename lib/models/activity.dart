@@ -20,19 +20,4 @@ class Activity {
       participants = json['participants'],
       price = (json['price'] as num).toDouble();
 
-  Activity copyWith({
-    final String? key,
-    final String? activity,
-    final String? type,
-    final int? participants,
-    final double? price
-  }){
-    return Activity(
-      key: key ?? this.key,
-      activity: activity ?? this.activity,
-      type: type ?? this.type,
-      participants: participants ?? this.participants,
-      price: price ?? this.price
-    );
-  }
 }
