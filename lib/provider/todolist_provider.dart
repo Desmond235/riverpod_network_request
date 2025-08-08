@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_network_request/models/todo.dart';
 import 'package:http/http.dart' as http;
@@ -59,6 +61,7 @@ class TodosNotifier extends AutoDisposeAsyncNotifier<List<Todo>> {
   static const baseUrl = 'http://localhost/';
   @override
   Future<List<Todo>> build() async {
+    ref.cacheFor(const Duration(minutes: 5));
     return _fetchTodo();
   }
 
@@ -105,5 +108,13 @@ class TodosNotifier extends AutoDisposeAsyncNotifier<List<Todo>> {
       );
       return _fetchTodo();
     });
+  }
+}
+
+extension CacheForExtension on Ref{
+  void cacheFor(Duration duration){
+    final link = keepAlive();
+    final timer = Timer(duration, () => link.close());
+    onDispose(timer.cancel);
   }
 }
