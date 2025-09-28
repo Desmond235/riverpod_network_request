@@ -111,8 +111,8 @@ class TodosNotifier extends AutoDisposeAsyncNotifier<List<Todo>> {
   }
 }
 
-extension CacheForExtension on Ref{
-  void cacheFor(Duration duration){
+extension CacheForExtension on Ref {
+  void cacheFor(Duration duration) {
     final link = keepAlive();
     final timer = Timer(duration, () => link.close());
     onDispose(timer.cancel);

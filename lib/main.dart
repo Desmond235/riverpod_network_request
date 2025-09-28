@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_network_request/provider/provider_observer.dart';
+import 'package:riverpod_network_request/screens/home/details_page_screen.dart';
 import 'package:riverpod_network_request/screens/home/homescreen.dart';
 import 'package:riverpod_network_request/provider/theme_provider.dart';
 
@@ -32,6 +33,9 @@ class MyApp extends ConsumerWidget {
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey)
       ),
+      routes: {
+        "/detail-page": (_) => DetailsPageScreen()
+      },
       home: Homescreen(),
     );
   }
